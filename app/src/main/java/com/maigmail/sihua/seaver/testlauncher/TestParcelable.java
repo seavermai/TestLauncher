@@ -26,6 +26,10 @@ public class TestParcelable implements Parcelable {
         testString = in.readString();
     }
 
+    public TestParcelable(String string) {
+        testString = string;
+    }
+
     public void writeToParcel(Parcel out, int flags) {
         out.writeInt(mData);
         out.writeString(testString);
@@ -33,5 +37,13 @@ public class TestParcelable implements Parcelable {
 
     public int describeContents() {
         return 0;
+    }
+
+    public int getmData() {
+        return mData;
+    }
+
+    public String getTestString() {
+        return testString;
     }
 }

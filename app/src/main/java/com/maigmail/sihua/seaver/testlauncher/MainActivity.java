@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     AppWidgetManager appWidgetManager;
 
     ViewGroup blah;
+    EditText editText;
 
     int numPackages = 0;
     int numCoreAndroidPackages = 0;
@@ -63,144 +65,146 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-    final PackageManager pm = getPackageManager();
-    ApplicationInfo ai;
-    //get a list of installed apps.
-    List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
+        final PackageManager pm = getPackageManager();
+        ApplicationInfo ai;
+        //get a list of installed apps.
+        List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
 
-    ArrayAdapter<String> applicationsAdapter = new ArrayAdapter<String>(MainActivity.this, R.layout.layout_list, applicationNames);
+        ArrayAdapter<String> applicationsAdapter = new ArrayAdapter<String>(MainActivity.this, R.layout.layout_list, applicationNames);
 
-    appWidgetManager = AppWidgetManager.getInstance(this);
-    appWidgetHost = new AppWidgetHost(this, R.id.APPWIDGET_HOST_ID);
+        appWidgetManager = AppWidgetManager.getInstance(this);
+        appWidgetHost = new AppWidgetHost(this, R.id.APPWIDGET_HOST_ID);
 
-    List<AppWidgetProviderInfo> listWidgets = appWidgetManager.getInstalledProviders();
-//    for (AppWidgetProviderInfo info : listWidgets) {
-//        Log.d(TAG, "Name: " + info.label );
-//        Log.d(TAG, "Provider Name: " + info.provider);
-//        Log.d(TAG, "Configure Name: " + info.configure);
-//    }
+        List<AppWidgetProviderInfo> listWidgets = appWidgetManager.getInstalledProviders();
+    //    for (AppWidgetProviderInfo info : listWidgets) {
+    //        Log.d(TAG, "Name: " + info.label );
+    //        Log.d(TAG, "Provider Name: " + info.provider);
+    //        Log.d(TAG, "Configure Name: " + info.configure);
+    //    }
 
-    blah = (ViewGroup) findViewById(R.id.blah);
-    blah.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-//				Toast.makeText(MainActivity.this, "blah clicked", Toast.LENGTH_SHORT).show();
+        blah = (ViewGroup) findViewById(R.id.blah);
+        blah.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+    //				Toast.makeText(MainActivity.this, "blah clicked", Toast.LENGTH_SHORT).show();
 
-            int appWidgetId = appWidgetHost.allocateAppWidgetId();
-            Intent pickIntent = new Intent(AppWidgetManager.ACTION_APPWIDGET_PICK);
-            pickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-            Bundle dataToSend = new Bundle();
-            dataToSend.putInt(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-            //dataToSend.putInt(LAYOUT_NUMBER, layoutNumber);
-            pickIntent.putExtras(dataToSend);
-            //startActivityForResult(pickIntent, R.id.REQUEST_PICK_APPWIDGET);
-            startActivityForResult(pickIntent, REQUEST_PICK_APPWIDGET);
+                int appWidgetId = appWidgetHost.allocateAppWidgetId();
+                Intent pickIntent = new Intent(AppWidgetManager.ACTION_APPWIDGET_PICK);
+                pickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+                Bundle dataToSend = new Bundle();
+                dataToSend.putInt(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+                //dataToSend.putInt(LAYOUT_NUMBER, layoutNumber);
+                pickIntent.putExtras(dataToSend);
+                //startActivityForResult(pickIntent, R.id.REQUEST_PICK_APPWIDGET);
+                startActivityForResult(pickIntent, REQUEST_PICK_APPWIDGET);
 
-            //appwidgetid = 238
+                //appwidgetid = 238
 
-            /*
-            Bundle extras = pickIntent.getExtras();
-            int appWidgetId2 = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
-//                if (resultCode == Activity.RESULT_OK) {
-            AppWidgetProviderInfo appWidgetInfo = appWidgetManager.getAppWidgetInfo(appWidgetId2);
-            //int[] ii = appWidgetManager.getAppWidgetIds(new ComponentName(getPackageName(), Widget.class.getName()), view);
+                /*
+                Bundle extras = pickIntent.getExtras();
+                int appWidgetId2 = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
+    //                if (resultCode == Activity.RESULT_OK) {
+                AppWidgetProviderInfo appWidgetInfo = appWidgetManager.getAppWidgetInfo(appWidgetId2);
+                //int[] ii = appWidgetManager.getAppWidgetIds(new ComponentName(getPackageName(), Widget.class.getName()), view);
 
-//                Log.d("CHOSEN", "Name: " + appWidgetInfo.label );
-//                Log.d("CHOSEN", "Provider Name: " + appWidgetInfo.provider);
-//                Log.d("CHOSEN", "Configure Name: " + appWidgetInfo.configure);
+    //                Log.d("CHOSEN", "Name: " + appWidgetInfo.label );
+    //                Log.d("CHOSEN", "Provider Name: " + appWidgetInfo.provider);
+    //                Log.d("CHOSEN", "Configure Name: " + appWidgetInfo.configure);
 
-*/
+    */
 
-//                AppWidgetProviderInfo appWidgetInfo = appWidgetManager.getAppWidgetInfo(appWidgetId);
-//
-//                //AppWidgetHostView hostView = appWidgetHost.createView(MainActivity.this, appWidgetId2, appWidgetInfo);
-//                AppWidgetHostView hostView = appWidgetHost.createView(MainActivity.this, appWidgetId, appWidgetInfo);
-//                hostView.setAppWidget(appWidgetId, appWidgetInfo);
-//
-//                blah.addView(hostView);
+    //                AppWidgetProviderInfo appWidgetInfo = appWidgetManager.getAppWidgetInfo(appWidgetId);
+    //
+    //                //AppWidgetHostView hostView = appWidgetHost.createView(MainActivity.this, appWidgetId2, appWidgetInfo);
+    //                AppWidgetHostView hostView = appWidgetHost.createView(MainActivity.this, appWidgetId, appWidgetInfo);
+    //                hostView.setAppWidget(appWidgetId, appWidgetInfo);
+    //
+    //                blah.addView(hostView);
 
-//             startActivityForResult(pickIntent, REQUEST_PICK_APPWIDGET);
+    //             startActivityForResult(pickIntent, REQUEST_PICK_APPWIDGET);
 
 
 
-        }
-    });
-
-/*
-    for (ApplicationInfo packageInfo : packages) {
-        if (pm.getLaunchIntentForPackage(packageInfo.packageName) != null) {
-            String packageName = packageInfo.packageName;
-//                String sourceDir = packageInfo.sourceDir;
-//                String launchActivity = pm.getLaunchIntentForPackage(packageInfo.packageName).toString();
-
-//                Log.d(TAG, "Installed package: " + packageInfo.packageName);
-//                Log.d(TAG, "Source dir: " + packageInfo.sourceDir);
-//                Log.d(TAG, "Launch Activity: " + pm.getLaunchIntentForPackage(packageInfo.packageName));
-            Log.d(TAG, "Installed package: " + packageName);
-//                Log.d(TAG, "Source dir: " + sourceDir);
-//                Log.d(TAG, "Launch Activity: " + launchActivity);
-
-            try {
-                ai = pm.getApplicationInfo(packageName, 0);
-            } catch ( PackageManager.NameNotFoundException e ) {
-                ai = null;
             }
-            String applicationName = "";
-            if (ai != null)
-                applicationName = pm.getApplicationLabel(ai).toString();
-            else
-                applicationName = "(Unknown)";
+        });
 
-            applicationNames.add(applicationName);
-            numPackages++;
+    /*
+        for (ApplicationInfo packageInfo : packages) {
+            if (pm.getLaunchIntentForPackage(packageInfo.packageName) != null) {
+                String packageName = packageInfo.packageName;
+    //                String sourceDir = packageInfo.sourceDir;
+    //                String launchActivity = pm.getLaunchIntentForPackage(packageInfo.packageName).toString();
 
-            if (packageName.contains("com.android."))
-                numCoreAndroidPackages++;
-        }
+    //                Log.d(TAG, "Installed package: " + packageInfo.packageName);
+    //                Log.d(TAG, "Source dir: " + packageInfo.sourceDir);
+    //                Log.d(TAG, "Launch Activity: " + pm.getLaunchIntentForPackage(packageInfo.packageName));
+                Log.d(TAG, "Installed package: " + packageName);
+    //                Log.d(TAG, "Source dir: " + sourceDir);
+    //                Log.d(TAG, "Launch Activity: " + launchActivity);
 
-    }
-*/
+                try {
+                    ai = pm.getApplicationInfo(packageName, 0);
+                } catch ( PackageManager.NameNotFoundException e ) {
+                    ai = null;
+                }
+                String applicationName = "";
+                if (ai != null)
+                    applicationName = pm.getApplicationLabel(ai).toString();
+                else
+                    applicationName = "(Unknown)";
 
-    Map<String, String> map = new HashMap<String, String>();
-    for (ApplicationInfo packageInfo : packages) {
-        if (pm.getLaunchIntentForPackage(packageInfo.packageName) != null) {
-            String packageName = packageInfo.packageName;
-            try {
-                ai = pm.getApplicationInfo(packageName, 0);
-            } catch (PackageManager.NameNotFoundException e) {
-                ai = null;
+                applicationNames.add(applicationName);
+                numPackages++;
+
+                if (packageName.contains("com.android."))
+                    numCoreAndroidPackages++;
             }
-            String applicationName = "";
-            if (ai != null)
-                applicationName = pm.getApplicationLabel(ai).toString();
-            else
-                applicationName = "(Unknown)";
 
-            map.put(packageName, applicationName);
         }
-    }
+    */
 
-    Set<Map.Entry<String, String>> set = map.entrySet();
-    List<Map.Entry<String, String>> list = new ArrayList<Map.Entry<String, String>>(set);
-    Collections.sort(list, new Comparator<Map.Entry<String, String>>() {
-        public int compare(Map.Entry<String, String> o1, Map.Entry<String, String> o2) {
-            return (o1.getValue()).compareTo(o2.getValue());
+        Map<String, String> map = new HashMap<String, String>();
+        for (ApplicationInfo packageInfo : packages) {
+            if (pm.getLaunchIntentForPackage(packageInfo.packageName) != null) {
+                String packageName = packageInfo.packageName;
+                try {
+                    ai = pm.getApplicationInfo(packageName, 0);
+                } catch (PackageManager.NameNotFoundException e) {
+                    ai = null;
+                }
+                String applicationName = "";
+                if (ai != null)
+                    applicationName = pm.getApplicationLabel(ai).toString();
+                else
+                    applicationName = "(Unknown)";
+
+                map.put(packageName, applicationName);
+            }
         }
-    });
-    for (Map.Entry<String, String> en : list) {
-        //Log.d("tag", en.getValue());
-        applicationNames.add(en.getValue());
-    }
+
+        Set<Map.Entry<String, String>> set = map.entrySet();
+        List<Map.Entry<String, String>> list = new ArrayList<Map.Entry<String, String>>(set);
+        Collections.sort(list, new Comparator<Map.Entry<String, String>>() {
+            public int compare(Map.Entry<String, String> o1, Map.Entry<String, String> o2) {
+                return (o1.getValue()).compareTo(o2.getValue());
+            }
+        });
+        for (Map.Entry<String, String> en : list) {
+            //Log.d("tag", en.getValue());
+            applicationNames.add(en.getValue());
+        }
 
 
-    //String[] dynamicList = { "App1", "App2", "App3", "App4", "App5" };
-    //mngr = new HomeScreenShortcutManager(this);
+        //String[] dynamicList = { "App1", "App2", "App3", "App4", "App5" };
+        //mngr = new HomeScreenShortcutManager(this);
 
-    //dynamic allocation into ArrayAdapter
-    arrayAdapter = new ArrayAdapter<String>(MainActivity.this, R.layout.layout_list,
-            R.id.layout_list_element, applicationNames);
-//        for (String s : dynamicList)
-//            arrayAdapter.add(s);
+        //dynamic allocation into ArrayAdapter
+        arrayAdapter = new ArrayAdapter<String>(MainActivity.this, R.layout.layout_list,
+                R.id.layout_list_element, applicationNames);
+    //        for (String s : dynamicList)
+    //            arrayAdapter.add(s);
+
+        editText = (EditText) findViewById(R.id.editText);
     }
 
     @Override
@@ -214,8 +218,6 @@ public class MainActivity extends AppCompatActivity {
         hostView.setAppWidget(appWidgetId2, appWidgetInfo);
 
         blah.addView(hostView);
-
-
 
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -231,11 +233,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         Toast.makeText(MainActivity.this, "Restoring instance state", Toast.LENGTH_SHORT).show();
         testParcelable = savedInstanceState.getParcelable(RUNTIME_STATE_PENDING_TESTVALUE1);
-        Log.d("MainActivity", "Restoring instance state");
+        editText.setText(testParcelable.getTestString());
+        //Log.d("MainActivity", "Restoring instance state");
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        testParcelable = new TestParcelable(editText.getText().toString());
+        //Toast.makeText(MainActivity.this, "editText = " + editText.getText().toString(), Toast.LENGTH_SHORT).show();
         Toast.makeText(MainActivity.this, "Saving instance state", Toast.LENGTH_SHORT).show();
         outState.putParcelable(RUNTIME_STATE_PENDING_TESTVALUE1, testParcelable);
         //Log.d("MainActivity", "Saving instance state");
