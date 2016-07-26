@@ -1,5 +1,6 @@
 package com.maigmail.sihua.seaver.testlauncher;
 
+import android.appwidget.AppWidgetProviderInfo;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -10,6 +11,7 @@ public class TestParcelable implements Parcelable {
 
     private int mData;
     private String testString;
+    private AppWidgetProviderInfo appWidgetProviderInfo;
 
     public static final Parcelable.Creator<TestParcelable> CREATOR = new Parcelable.Creator<TestParcelable>() {
         public TestParcelable createFromParcel(Parcel in) {
@@ -33,6 +35,7 @@ public class TestParcelable implements Parcelable {
     public void writeToParcel(Parcel out, int flags) {
         out.writeInt(mData);
         out.writeString(testString);
+
     }
 
     public int describeContents() {
