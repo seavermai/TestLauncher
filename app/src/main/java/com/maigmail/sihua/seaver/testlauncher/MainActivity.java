@@ -10,6 +10,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.support.v7.app.AlertDialog;
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private final String TAG = "packagemanager";
 
     private static final int REQUEST_PICK_APPWIDGET = 80;
+    //private int appWidgetId;
     private AppWidgetHost appWidgetHost;
     private AppWidgetManager appWidgetManager;
 
@@ -58,6 +60,12 @@ public class MainActivity extends AppCompatActivity {
     ArrayAdapter<String> arrayAdapter;
     List<String> applicationNames = new ArrayList<String>();
 
+    // SharedPreferences
+    SharedPreferences sharedPrefs;
+    private static final String testLauncherPreferences = "TestLauncherPreferences";
+    private static final String editTextStringKey = "editTextStringKey";
+    private String editTextString;
+
     // parcelable test
     //private AppWidgetProviderInfo appWidgetProviderInfo;
     private TestParcelable testParcelable;
@@ -69,6 +77,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        editText = (EditText) findViewById(R.id.editText);
 
 
         final PackageManager pm = getPackageManager();
@@ -149,11 +160,18 @@ public class MainActivity extends AppCompatActivity {
     //        for (String s : dynamicList)
     //            arrayAdapter.add(s);
 
-        editText = (EditText) findViewById(R.id.editText);
+
+        sharedPrefs = getSharedPreferences(testLauncherPreferences, Context.MODE_PRIVATE);
+
+        if (sharedPrefs.contains(editTextStringKey)) {
+            editText.setText(sharedPrefs.getString(editTextStringKey, null));
+        }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
         Bundle extras = data.getExtras();
         int appWidgetId2 = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
 //                if (resultCode == Activity.RESULT_OK) {
@@ -165,7 +183,19 @@ public class MainActivity extends AppCompatActivity {
 
         blah.addView(hostView);
 
-        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        Toast.makeText(MainActivity.this, "Pausing", Toast.LENGTH_SHORT).show();
+
+        // save data here
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+        editTextString = editText.getText().toString();
+        editor.putString(editTextStringKey, editTextString);
+        editor.commit();
     }
 
     @Override
@@ -176,28 +206,54 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        Toast.makeText(MainActivity.this, "Resuming", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        Toast.makeText(MainActivity.this, "Restoring instance state", Toast.LENGTH_SHORT).show();
-        testParcelable = savedInstanceState.getParcelable(RUNTIME_STATE_PENDING_TESTVALUE1);
-        editText.setText(testParcelable.getTestString());
-        pendingAppWidgetProviderInfo = savedInstanceState.getParcelable(RUNTIME_STATE_PENDING_ADD_WIDGET_INFO);
-        pendingAppWidgetId = savedInstanceState.getInt(RUNTIME_STATE_PENDING_ADD_WIDGET_ID);
+        //Toast.makeText(MainActivity.this, "Restoring instance state", Toast.LENGTH_SHORT).show();
 
-        hostView = appWidgetHost.createView(MainActivity.this, pendingAppWidgetId, pendingAppWidgetProviderInfo);
-        hostView.setAppWidget(pendingAppWidgetId, pendingAppWidgetProviderInfo);
+        //testParcelable = savedInstanceState.getParcelable(RUNTIME_STATE_PENDING_TESTVALUE1);
+        //editText.setText(testParcelable.getTestString());
+        //if (blah.getChildCount() != 0 ) {
+        //    Toast.makeText(MainActivity.this, "blah is not empty", Toast.LENGTH_SHORT).show();
+        if (blah.getChildCount() != 0) {
+            Toast.makeText(MainActivity.this, "blah is not empty", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(MainActivity.this, "blah is empty", Toast.LENGTH_SHORT).show();
+        }
+            pendingAppWidgetProviderInfo = savedInstanceState.getParcelable(RUNTIME_STATE_PENDING_ADD_WIDGET_INFO);
+            pendingAppWidgetId = savedInstanceState.getInt(RUNTIME_STATE_PENDING_ADD_WIDGET_ID);
 
-        blah.addView(hostView);
+            hostView = appWidgetHost.createView(MainActivity.this, pendingAppWidgetId, pendingAppWidgetProviderInfo);
+            hostView.setAppWidget(pendingAppWidgetId, pendingAppWidgetProviderInfo);
+
+            blah.addView(hostView);
+        //}
+        //else {
+        //    Toast.makeText(MainActivity.this, "blah is empty", Toast.LENGTH_SHORT).show();
+        //}
         //Log.d("MainActivity", "Restoring instance state");
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        testParcelable = new TestParcelable(editText.getText().toString());
+        //testParcelable = new TestParcelable(editText.getText().toString());
         //Toast.makeText(MainActivity.this, "editText = " + editText.getText().toString(), Toast.LENGTH_SHORT).show();
-        Toast.makeText(MainActivity.this, "Saving instance state", Toast.LENGTH_SHORT).show();
-        outState.putParcelable(RUNTIME_STATE_PENDING_TESTVALUE1, testParcelable);
+        //Toast.makeText(MainActivity.this, "Saving instance state", Toast.LENGTH_SHORT).show();
+
+
+        //outState.putParcelable(RUNTIME_STATE_PENDING_TESTVALUE1, testParcelable);
+//        if (blah.getChildCount() != 0) {
+//            Toast.makeText(MainActivity.this, "blah is not empty", Toast.LENGTH_SHORT).show();
+//        } else {
+//            Toast.makeText(MainActivity.this, "blah is empty", Toast.LENGTH_SHORT).show();
+//        }
         outState.putParcelable(RUNTIME_STATE_PENDING_ADD_WIDGET_INFO, pendingAppWidgetProviderInfo);
         outState.putInt(RUNTIME_STATE_PENDING_ADD_WIDGET_ID, pendingAppWidgetId);
         //Log.d("MainActivity", "Saving instance state");
