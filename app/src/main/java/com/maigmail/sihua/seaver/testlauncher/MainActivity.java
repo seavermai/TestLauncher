@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private AppWidgetManager appWidgetManager;
 
     private AppWidgetProviderInfo pendingAppWidgetProviderInfo;
-    private int pendingAppWidgetId;
+    private int pendingAppWidgetId = -1;
     AppWidgetHostView hostView;
 
     ViewGroup blah;
@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String testLauncherPreferences = "TestLauncherPreferences";
     private static final String editTextStringKey = "editTextStringKey";
     private String editTextString;
+    private static final String pendingAppWidgetIdKey = "pendingAppWidgetIdKey";
 
     // parcelable test
     //private AppWidgetProviderInfo appWidgetProviderInfo;
@@ -163,8 +164,22 @@ public class MainActivity extends AppCompatActivity {
 
         sharedPrefs = getSharedPreferences(testLauncherPreferences, Context.MODE_PRIVATE);
 
+        // conditionals may not be needed
         if (sharedPrefs.contains(editTextStringKey)) {
-            editText.setText(sharedPrefs.getString(editTextStringKey, null));
+            editText.setText(sharedPrefs.getString(editTextStringKey, ""));
+        }
+        if (sharedPrefs.contains(pendingAppWidgetIdKey)) {
+            pendingAppWidgetId = sharedPrefs.getInt(pendingAppWidgetIdKey, -1);
+        }
+
+        // restore widget
+        if (pendingAppWidgetId != -1) {
+            pendingAppWidgetProviderInfo = appWidgetManager.getAppWidgetInfo(pendingAppWidgetId);
+
+            hostView = appWidgetHost.createView(MainActivity.this, pendingAppWidgetId, pendingAppWidgetProviderInfo);
+            hostView.setAppWidget(pendingAppWidgetId, pendingAppWidgetProviderInfo);
+
+            blah.addView(hostView);
         }
     }
 
@@ -183,6 +198,8 @@ public class MainActivity extends AppCompatActivity {
 
         blah.addView(hostView);
 
+        //Log.d("AppWidgetProviderInfo", pendingAppWidgetProviderInfo
+
     }
 
     @Override
@@ -195,6 +212,9 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPrefs.edit();
         editTextString = editText.getText().toString();
         editor.putString(editTextStringKey, editTextString);
+        if (pendingAppWidgetId != -1)
+            editor.putInt(pendingAppWidgetIdKey, pendingAppWidgetId);
+
         editor.commit();
     }
 
